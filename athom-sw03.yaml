@@ -112,7 +112,7 @@ mdns:
 captive_portal:
 
 dashboard_import:
-  package_import_url: github://athom-tech/athom-configs/athom-sw03.yaml
+  package_import_url: github://nanallac/athom-configs/athom-sw03.yaml
 
 globals:
   - id: restore_mode
@@ -158,7 +158,7 @@ binary_sensor:
           - homeassistant.action:
               action: light.toggle
               data:
-                - entity_id: "${button1}"
+                entity_id: "${button1}"
       - timing:
           - ON for at least 5s
         then:
