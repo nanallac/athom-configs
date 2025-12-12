@@ -12,9 +12,9 @@ substitutions:
   # Projection version denotes the release version of the yaml file, allowing checking of deployed vs latest version
   project_version: "v1.1.4"
   # Restore the relay (GPO switch) upon reboot to state:
-  light1_restore_mode: RESTORE_DEFAULT_OFF
-  light2_restore_mode: RESTORE_DEFAULT_OFF
-  light3_restore_mode: RESTORE_DEFAULT_OFF
+  light1_restore_mode: RESTORE_DEFAULT_ON
+  light2_restore_mode: RESTORE_DEFAULT_ON
+  light3_restore_mode: RESTORE_DEFAULT_ON
   # Define a domain for this device to use. i.e. iot.home.lan (so device will appear as athom-smart-plug-v2.iot.home.lan in DNS/DHCP logs)
   dns_domain: ".local"
   # Set timezone of the smart plug. Useful if the plug is in a location different to the HA server. Can be entered in unix Country/Area format (i.e. "Australia/Sydney")
@@ -31,6 +31,9 @@ substitutions:
   log_level: "DEBUG"
   # Enable or disable the use of IPv6 networking on the device
   ipv6_enable: "false"
+
+  # Home Assistant entities to toggle
+  button1: ""
 
 esphome:
   name: "${name}"
@@ -152,9 +155,16 @@ binary_sensor:
           - ON for at most 0.5s
           - OFF for at least 0.2s
         then:
+          - homeassistant.action:
+              action: light.toggle
+              data:
+                - entity_id: "${button1}"
+      - timing:
+          - ON for at least 5s
+        then:
           - light.toggle: light1
       - timing:
-          - ON for at least 4s
+          - ON for at least 10s
         then:
           - button.press: Reset
 
